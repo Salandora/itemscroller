@@ -14,7 +14,6 @@ import net.minecraft.client.resources.I18n;
 public class GuiConfigs extends GuiConfigsBase
 {
     private static ConfigGuiTab tab = ConfigGuiTab.HOTKEYS;
-    private int id;
 
     public GuiConfigs()
     {
@@ -29,7 +28,6 @@ public class GuiConfigs extends GuiConfigsBase
         super.initGui();
         this.clearOptions();
 
-        this.id = 0;
         int x = 10;
         int y = 26;
 
@@ -50,7 +48,7 @@ public class GuiConfigs extends GuiConfigsBase
             width = this.mc.fontRenderer.getStringWidth(label) + 10;
         }
 
-        ButtonGeneric button = new ButtonGeneric(this.id++, x, y, width, 20, label);
+        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, label);
         button.enabled = enabled;
         this.addButton(button, listener);
 

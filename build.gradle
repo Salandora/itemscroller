@@ -22,10 +22,10 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url 'https://www.jitpack.io' }
     maven { url 'https://www.dimdev.org/maven/' }
-    maven { url 'http://repo.strezz.org/artifactory/list/Strezz-Central' }
     maven { url 'https://masa.dy.fi/maven' }
 }
 
