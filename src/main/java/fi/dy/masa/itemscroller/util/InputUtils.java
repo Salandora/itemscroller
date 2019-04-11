@@ -4,11 +4,27 @@ import fi.dy.masa.itemscroller.config.Hotkeys;
 import fi.dy.masa.itemscroller.event.KeybindCallbacks;
 import fi.dy.masa.itemscroller.recipes.CraftingHandler;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
 public class InputUtils
 {
+
+    public static int getMouseX()
+    {
+        Minecraft mc = Minecraft.getInstance();
+        MainWindow window = mc.mainWindow;
+        return (int)(mc.mouseHelper.getMouseX() * (double) window.getScaledWidth() / (double) window.getWidth());
+    }
+
+    public static int getMouseY()
+    {
+        Minecraft mc = Minecraft.getInstance();
+        MainWindow window = mc.mainWindow;
+        return (int)(mc.mouseHelper.getMouseY() * (double) window.getScaledHeight() / (double) window.getHeight());
+    }
+
     public static boolean isRecipeViewOpen()
     {
         Minecraft mc = Minecraft.getInstance();
@@ -123,5 +139,20 @@ public class InputUtils
         }
 
         return MoveAmount.NONE;
+    }
+
+    public static boolean mouseEventIsLeftClick(int keyCode)
+    {
+        return Minecraft.getInstance().gameSettings.keyBindAttack.func_197984_a(keyCode);
+    }
+
+    public static boolean mouseEventIsRightClick(int keyCode)
+    {
+        return Minecraft.getInstance().gameSettings.keyBindUseItem.func_197984_a(keyCode);
+    }
+
+    public static boolean mouseEventIsPickBlock(int keyCode)
+    {
+        return Minecraft.getInstance().gameSettings.keyBindPickBlock.func_197984_a(keyCode);
     }
 }

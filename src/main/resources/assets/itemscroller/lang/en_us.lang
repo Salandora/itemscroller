@@ -1,0 +1,8 @@
+language.name=English
+language.region=US
+language.code=en_US
+
+itemscroller.gui.title.configs=Item Scroller Configs
+itemscroller.gui.label.recipe_page=Page %d / %d
+
+itemscroller.hotkeys.category.hotkeys=Hotkeys
