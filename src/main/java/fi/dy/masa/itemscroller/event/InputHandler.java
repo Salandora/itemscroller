@@ -4,22 +4,33 @@ import org.lwjgl.glfw.GLFW;
 import fi.dy.masa.itemscroller.Reference;
 import fi.dy.masa.itemscroller.config.Configs;
 import fi.dy.masa.itemscroller.config.Hotkeys;
+import fi.dy.masa.itemscroller.gui.widgets.WidgetTradeList;
+import fi.dy.masa.itemscroller.mixin.IMixinGuiMerchant;
 import fi.dy.masa.itemscroller.recipes.RecipeStorage;
 import fi.dy.masa.itemscroller.util.AccessorUtils;
 import fi.dy.masa.itemscroller.util.InputUtils;
 import fi.dy.masa.itemscroller.util.InventoryUtils;
 import fi.dy.masa.itemscroller.util.MoveAction;
+import fi.dy.masa.itemscroller.villager.VillagerDataStorage;
 import fi.dy.masa.malilib.hotkeys.IHotkey;
 import fi.dy.masa.malilib.hotkeys.IKeybindManager;
 import fi.dy.masa.malilib.hotkeys.IKeybindProvider;
 import fi.dy.masa.malilib.hotkeys.IKeyboardInputHandler;
 import fi.dy.masa.malilib.hotkeys.IMouseInputHandler;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.inventory.Slot;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.ResourceLocation;
 
 public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IMouseInputHandler
 {
@@ -97,6 +108,36 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
     @Override
     public boolean onMouseScroll(int mouseX, int mouseY, double dWheel)
     {
+        Minecraft mc = Minecraft.getInstance();
+        VillagerDataStorage storage = VillagerDataStorage.getInstance();
+
+        if (Configs.Toggles.VILLAGER_TRADE_LIST.getBooleanValue())
+        {
+            if (mc.currentScreen == null &&
+                mc.objectMouseOver.type == RayTraceResult.Type.ENTITY &&
+                mc.objectMouseOver.entity instanceof EntityVillager)
+            {
+                storage.setLastInteractedUUID(mc.objectMouseOver.entity.getUniqueID());
+            }
+            else if (mc.currentScreen instanceof GuiMerchant && storage.hasInteractionTarget())
+            {
+                WidgetTradeList widget = RenderEventHandler.instance().getTradeListWidget();
+
+                if (widget != null)
+                {
+                    if (widget.isMouseOver(mouseX, mouseY))
+                    {
+                        if (dWheel != 0)
+                        {
+                            widget.onMouseScrolled(mouseX, mouseY, (int)dWheel);
+                        }
+
+                        return true;
+                    }
+                }
+            }
+        }
+
         MoveAction action = InventoryUtils.getActiveMoveAction();
 
         if (action != MoveAction.NONE && InputUtils.isActionKeyActive(action) == false)
@@ -109,9 +150,43 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
 
     @Override
     public boolean onMouseClick(int mouseX, int mouseY, int eventButton, boolean eventButtonState) {
+        Minecraft mc = Minecraft.getInstance();
+        VillagerDataStorage storage = VillagerDataStorage.getInstance();
+
+        if (Configs.Toggles.VILLAGER_TRADE_LIST.getBooleanValue()) {
+            if (mc.currentScreen == null &&
+                mc.objectMouseOver.type == RayTraceResult.Type.ENTITY &&
+                mc.objectMouseOver.entity instanceof EntityVillager)
+            {
+                storage.setLastInteractedUUID(mc.objectMouseOver.entity.getUniqueID());
+            }
+            else if (mc.currentScreen instanceof GuiMerchant && storage.hasInteractionTarget())
+            {
+                WidgetTradeList widget = RenderEventHandler.instance().getTradeListWidget();
+
+                if (widget != null)
+                {
+                    if (widget.isMouseOver(mouseX, mouseY))
+                    {
+                        if (eventButtonState)
+                        {
+                            widget.onMouseClicked(mouseX, mouseY, eventButton);
+                        }
+
+                        return true;
+                    }
+
+                    if (eventButtonState == false) {
+                        widget.onMouseReleased(mouseX, mouseY, eventButton);
+                    }
+                }
+            }
+        }
+
         MoveAction action = InventoryUtils.getActiveMoveAction();
 
-        if (action != MoveAction.NONE && InputUtils.isActionKeyActive(action) == false) {
+        if (action != MoveAction.NONE && InputUtils.isActionKeyActive(action) == false)
+        {
             InventoryUtils.stopDragging();
         }
 
@@ -237,5 +312,14 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
         }
 
         return false;
+    }
+
+    public static void changeTradePage(GuiMerchant gui, int page)
+    {
+        ((IMixinGuiMerchant) gui).setSelectedMerchantRecipe(page);
+        ((ContainerMerchant) gui.inventorySlots).setCurrentRecipeIndex(page);
+        PacketBuffer packetbuffer = new PacketBuffer(Unpooled.buffer());
+        packetbuffer.writeInt(page);
+        Minecraft.getInstance().getConnection().sendPacket(new CPacketCustomPayload(new ResourceLocation("itemscroller", "mc_trsel"), packetbuffer));
     }
 }

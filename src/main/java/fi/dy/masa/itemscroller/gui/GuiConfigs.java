@@ -33,7 +33,7 @@ public class GuiConfigs extends GuiConfigsBase
 
         for (ConfigGuiTab tab : ConfigGuiTab.values())
         {
-            x += this.createButton(x, y, -1, tab) + 4;
+            x += this.createButton(x, y, -1, tab);
         }
     }
 
@@ -52,7 +52,7 @@ public class GuiConfigs extends GuiConfigsBase
         button.enabled = enabled;
         this.addButton(button, listener);
 
-        return width;
+        return width + 2;
     }
 
     @Override

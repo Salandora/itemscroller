@@ -9,8 +9,10 @@
         "IMixinSlot",
         "MixinGameRenderer",
         "MixinContainer",
+        "MixinMinecraft",
+        "MixinGuiMerchant",
         "MixinGuiScreen",
-        "MixinMinecraft"
+        "MixinInventoryEffectRenderer"
     ],
     "injectors": {
         "defaultRequire": 1

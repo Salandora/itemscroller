@@ -2,7 +2,13 @@ language.name=English
 language.region=US
 language.code=en_US
 
-itemscroller.gui.title.configs=Item Scroller Configs
-itemscroller.gui.label.recipe_page=Page %d / %d
+itemscroller.gui.button.config_gui.generic=Generic
+itemscroller.gui.button.config_gui.hotkeys=Hotkeys
+itemscroller.gui.button.config_gui.toggles=Toggles
 
 itemscroller.hotkeys.category.hotkeys=Hotkeys
+
+itemscroller.gui.title.configs=Item Scroller Configs
+itemscroller.gui.label.recipe_page=Page %d / %d
+itemscroller.gui.label.trades=Trades
+itemscroller.gui.label.trade_uses=Trade uses: %d / %d

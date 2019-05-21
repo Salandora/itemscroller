@@ -1,5 +1,7 @@
 package fi.dy.masa.itemscroller;
 
+import fi.dy.masa.itemscroller.event.WorldLoadListener;
+import fi.dy.masa.malilib.event.WorldLoadHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dimdev.rift.listener.client.ClientTickable;
@@ -45,6 +47,10 @@ public class ItemScroller implements ClientTickable, InitializationListener
             InputEventHandler.getInstance().registerKeybindProvider(handler);
             InputEventHandler.getInstance().registerKeyboardInputHandler(handler);
             InputEventHandler.getInstance().registerMouseInputHandler(handler);
+
+            WorldLoadListener listener = new WorldLoadListener();
+            WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
+            WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
 
             KeybindCallbacks.getInstance().setCallbacks();
         }
