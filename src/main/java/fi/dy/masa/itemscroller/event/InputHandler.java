@@ -5,9 +5,9 @@ import fi.dy.masa.itemscroller.Reference;
 import fi.dy.masa.itemscroller.config.Configs;
 import fi.dy.masa.itemscroller.config.Hotkeys;
 import fi.dy.masa.itemscroller.gui.widgets.WidgetTradeList;
-import fi.dy.masa.itemscroller.mixin.IMixinGuiMerchant;
 import fi.dy.masa.itemscroller.recipes.RecipeStorage;
 import fi.dy.masa.itemscroller.util.AccessorUtils;
+import fi.dy.masa.itemscroller.util.IGuiMerchant;
 import fi.dy.masa.itemscroller.util.InputUtils;
 import fi.dy.masa.itemscroller.util.InventoryUtils;
 import fi.dy.masa.itemscroller.util.MoveAction;
@@ -31,6 +31,7 @@ import net.minecraft.network.play.client.CPacketCustomPayload;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.village.MerchantRecipeList;
 
 public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IMouseInputHandler
 {
@@ -113,7 +114,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
 
         if (Configs.Toggles.VILLAGER_TRADE_LIST.getBooleanValue())
         {
-            if (mc.currentScreen == null &&
+            if (mc.currentScreen == null && mc.objectMouseOver != null &&
                 mc.objectMouseOver.type == RayTraceResult.Type.ENTITY &&
                 mc.objectMouseOver.entity instanceof EntityVillager)
             {
@@ -121,7 +122,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
             }
             else if (mc.currentScreen instanceof GuiMerchant && storage.hasInteractionTarget())
             {
-                WidgetTradeList widget = RenderEventHandler.instance().getTradeListWidget();
+                WidgetTradeList widget = ((IGuiMerchant) mc.currentScreen).getTradeListWidget();
 
                 if (widget != null)
                 {
@@ -162,7 +163,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
             }
             else if (mc.currentScreen instanceof GuiMerchant && storage.hasInteractionTarget())
             {
-                WidgetTradeList widget = RenderEventHandler.instance().getTradeListWidget();
+                WidgetTradeList widget = ((IGuiMerchant) mc.currentScreen).getTradeListWidget();
 
                 if (widget != null)
                 {
@@ -176,7 +177,8 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
                         return true;
                     }
 
-                    if (eventButtonState == false) {
+                    if (eventButtonState == false)
+                    {
                         widget.onMouseReleased(mouseX, mouseY, eventButton);
                     }
                 }
@@ -316,10 +318,20 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
 
     public static void changeTradePage(GuiMerchant gui, int page)
     {
-        ((IMixinGuiMerchant) gui).setSelectedMerchantRecipe(page);
+        Minecraft mc = Minecraft.getInstance();
+        MerchantRecipeList trades = gui.getMerchant().getRecipes(mc.player);
+
+        // The trade list is unfortunately synced after the GUI
+        // opens, so the trade list can be null here when we want to
+        // restore the last viewed page when the GUI first opens
+        if (page >= 0 && (trades == null || page < trades.size()))
+        {
+            ((IGuiMerchant) gui).setSelectedMerchantRecipe(page);
+        }
+
         ((ContainerMerchant) gui.inventorySlots).setCurrentRecipeIndex(page);
         PacketBuffer packetbuffer = new PacketBuffer(Unpooled.buffer());
         packetbuffer.writeInt(page);
-        Minecraft.getInstance().getConnection().sendPacket(new CPacketCustomPayload(new ResourceLocation("itemscroller", "mc_trsel"), packetbuffer));
+        mc.getConnection().sendPacket(new CPacketCustomPayload(new ResourceLocation("itemscroller", "mc_trsel"), packetbuffer));
     }
 }
