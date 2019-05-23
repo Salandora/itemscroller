@@ -79,7 +79,7 @@ public abstract class MixinGuiMerchant extends GuiContainer implements IGuiMerch
         }
     }
 
-    @Inject(method = "drawScreen",
+    @Inject(method = "render",
             at = @At(value = "FIELD",
                      target = "Lnet/minecraft/client/gui/GuiMerchant;selectedMerchantRecipe:I"), cancellable = true)
     private void recipeIndexCheck(int mouseX, int mouseY, float partialTicks, CallbackInfo ci)
@@ -93,7 +93,7 @@ public abstract class MixinGuiMerchant extends GuiContainer implements IGuiMerch
         }
     }
 
-    @Inject(method = "drawScreen", at = @At("TAIL"))
+    @Inject(method = "render", at = @At("TAIL"))
     private void onDrawScreenPost(int mouseX, int mouseY, float partialTicks, CallbackInfo ci)
     {
         if (Configs.Toggles.VILLAGER_TRADE_LIST.getBooleanValue() && this.widgetTradeList != null)
