@@ -58,7 +58,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
     }
 
     @Override
-    public boolean onKeyInput(int eventKey, boolean eventKeyState)
+    public boolean onKeyInput(int keyCode, int scanCode, int modifiers, boolean eventKeyState)
     {
         if (InputUtils.isRecipeViewOpen() && eventKeyState)
         {
@@ -68,23 +68,23 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
             int recipesPerPage = recipes.getRecipeCountPerPage();
             int recipeIndexChange = GuiScreen.isShiftKeyDown() ? recipesPerPage : recipesPerPage / 2;
 
-            if (eventKey >= GLFW.GLFW_KEY_1 && eventKey <= GLFW.GLFW_KEY_9)
+            if (keyCode >= GLFW.GLFW_KEY_1 && keyCode <= GLFW.GLFW_KEY_9)
             {
-                index = MathHelper.clamp(eventKey - GLFW.GLFW_KEY_1, 0, 8);
+                index = MathHelper.clamp(keyCode - GLFW.GLFW_KEY_1, 0, 8);
             }
-            else if (eventKey == GLFW.GLFW_KEY_UP && oldIndex > 0)
+            else if (keyCode == GLFW.GLFW_KEY_UP && oldIndex > 0)
             {
                 index = oldIndex - 1;
             }
-            else if (eventKey == GLFW.GLFW_KEY_DOWN && oldIndex < (recipes.getTotalRecipeCount() - 1))
+            else if (keyCode == GLFW.GLFW_KEY_DOWN && oldIndex < (recipes.getTotalRecipeCount() - 1))
             {
                 index = oldIndex + 1;
             }
-            else if (eventKey == GLFW.GLFW_KEY_LEFT && oldIndex >= recipeIndexChange)
+            else if (keyCode == GLFW.GLFW_KEY_LEFT && oldIndex >= recipeIndexChange)
             {
                 index = oldIndex - recipeIndexChange;
             }
-            else if (eventKey == GLFW.GLFW_KEY_RIGHT && oldIndex < (recipes.getTotalRecipeCount() - recipeIndexChange))
+            else if (keyCode == GLFW.GLFW_KEY_RIGHT && oldIndex < (recipes.getTotalRecipeCount() - recipeIndexChange))
             {
                 index = oldIndex + recipeIndexChange;
             }
@@ -103,7 +103,7 @@ public class InputHandler implements IKeybindProvider, IKeyboardInputHandler, IM
             InventoryUtils.stopDragging();
         }
 
-        return this.handleInput(eventKey, eventKeyState, 0, 0, 0);
+        return this.handleInput(keyCode, eventKeyState, 0, 0, 0);
     }
 
     @Override

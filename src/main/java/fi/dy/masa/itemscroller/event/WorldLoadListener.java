@@ -8,8 +8,9 @@ import net.minecraft.client.multiplayer.WorldClient;
 
 public class WorldLoadListener implements IWorldLoadListener
 {
+
     @Override
-    public void onWorldLoadPre(@Nullable WorldClient world, Minecraft mc)
+    public void onWorldLoadPre(@Nullable WorldClient worldBefore, @Nullable WorldClient worldAfter, Minecraft mc)
     {
         WorldClient worldOld = Minecraft.getInstance().world;
 
@@ -17,7 +18,7 @@ public class WorldLoadListener implements IWorldLoadListener
         if (worldOld != null)
         {
             // Quitting to main menu
-            if (world == null)
+            if (worldBefore == null)
             {
                 this.writeDataGlobal();
             }
@@ -25,16 +26,11 @@ public class WorldLoadListener implements IWorldLoadListener
         else
         {
             // Logging in to a world, load the global data
-            if (world != null)
+            if (worldBefore != null)
             {
                 this.readStoredDataGlobal();
             }
         }
-    }
-
-    @Override
-    public void onWorldLoadPost(@Nullable WorldClient world, Minecraft mc)
-    {
     }
 
     private void writeDataGlobal()

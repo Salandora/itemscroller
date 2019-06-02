@@ -44,9 +44,9 @@ public class ItemScroller implements ClientTickable, InitializationListener
             ConfigManager.getInstance().registerConfigHandler(Reference.MOD_ID, new Configs());
 
             InputHandler handler = new InputHandler();
-            InputEventHandler.getInstance().registerKeybindProvider(handler);
-            InputEventHandler.getInstance().registerKeyboardInputHandler(handler);
-            InputEventHandler.getInstance().registerMouseInputHandler(handler);
+            InputEventHandler.getKeybindManager().registerKeybindProvider(handler);
+            InputEventHandler.getInputManager().registerKeyboardInputHandler(handler);
+            InputEventHandler.getInputManager().registerMouseInputHandler(handler);
 
             WorldLoadListener listener = new WorldLoadListener();
             WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);

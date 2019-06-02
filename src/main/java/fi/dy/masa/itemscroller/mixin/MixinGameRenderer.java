@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.GameRenderer;
 public abstract class MixinGameRenderer
 {
     @Inject(method = "updateCameraAndRender(FJZ)V", at = {
-            @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraftforge/client/ForgeHooksClient;drawScreen(Lnet/minecraft/client/gui/GuiScreen;IIF)V"),
+            @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraftforge/client/ForgeHooksClient;render(Lnet/minecraft/client/gui/GuiScreen;IIF)V"),
             @At(value = "INVOKE", shift = Shift.AFTER, target = "Lnet/minecraft/client/gui/GuiScreen;render(IIF)V")
             },
             require = 1, allow = 1)

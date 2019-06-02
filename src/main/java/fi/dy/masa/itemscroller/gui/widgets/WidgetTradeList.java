@@ -30,7 +30,7 @@ public class WidgetTradeList extends WidgetBase
 
     public WidgetTradeList(int x, int y, GuiMerchant parentGui)
     {
-        super(x, y, 106, 166, 0);
+        super(x, y, 106, 166);
 
         this.scrollBar = (new GuiScrollBar(Icons.SCROLL_BAR_6)).setRenderBarBackground(false);
         this.parentGui = parentGui;
@@ -119,7 +119,7 @@ public class WidgetTradeList extends WidgetBase
     }
 
     @Override
-    public boolean onMouseScrolledImpl(int mouseX, int mouseY, int mouseWheelDelta)
+    public boolean onMouseScrolledImpl(int mouseX, int mouseY, double mouseWheelDelta)
     {
         this.scrollBar.offsetValue(mouseWheelDelta < 0 ? 1 : -1);
         return true;
@@ -209,7 +209,7 @@ public class WidgetTradeList extends WidgetBase
                 int y = this.y + (index - scrollBarPos) * 20 + 18;
                 MerchantRecipe recipe = list.get(index);
 
-                this.entryList.add(new WidgetTradeEntry(x, y, 88, 20, 0, recipe, this.recipeList.indexOf(recipe), this.data));
+                this.entryList.add(new WidgetTradeEntry(x, y, 88, 20, recipe, this.recipeList.indexOf(recipe), this.data));
             }
         }
     }

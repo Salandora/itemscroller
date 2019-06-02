@@ -7,6 +7,7 @@ import fi.dy.masa.itemscroller.config.Configs;
 import fi.dy.masa.itemscroller.config.Hotkeys;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
+import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import net.minecraft.client.resources.I18n;
@@ -49,7 +50,7 @@ public class GuiConfigs extends GuiConfigsBase
         }
 
         ButtonGeneric button = new ButtonGeneric(x, y, width, 20, label);
-        button.enabled = enabled;
+        button.setEnabled(enabled);
         this.addButton(button, listener);
 
         return width + 2;
@@ -94,7 +95,7 @@ public class GuiConfigs extends GuiConfigsBase
         return ConfigOptionWrapper.createFor(configs);
     }
 
-    private static class ButtonListener implements IButtonActionListener<ButtonGeneric>
+    private static class ButtonListener implements IButtonActionListener
     {
         private final GuiConfigs parent;
         private final ConfigGuiTab tab;
@@ -106,12 +107,7 @@ public class GuiConfigs extends GuiConfigsBase
         }
 
         @Override
-        public void actionPerformed(ButtonGeneric control)
-        {
-        }
-
-        @Override
-        public void actionPerformedWithButton(ButtonGeneric control, int mouseButton)
+        public void actionPerformedWithButton(ButtonBase control, int mouseButton)
         {
             GuiConfigs.tab = this.tab;
 
