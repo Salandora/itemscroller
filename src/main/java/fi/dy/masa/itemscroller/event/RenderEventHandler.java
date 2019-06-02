@@ -1,8 +1,5 @@
 package fi.dy.masa.itemscroller.event;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
 import fi.dy.masa.itemscroller.config.Configs;
 import fi.dy.masa.itemscroller.recipes.CraftingRecipe;
 import fi.dy.masa.itemscroller.recipes.RecipeStorage;
@@ -14,18 +11,13 @@ import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiMerchant;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+
 
 public class RenderEventHandler
 {
@@ -80,8 +72,9 @@ public class RenderEventHandler
 
             if (Configs.Generic.CRAFTING_RENDER_RECIPE_ITEMS.getBooleanValue())
             {
-                final int mouseX = InputUtils.getMouseX();
-                final int mouseY = InputUtils.getMouseY();
+                MainWindow window = this.mc.mainWindow;
+                final int mouseX = (int) (this.mc.mouseHelper.getMouseX() * (double) window.getScaledWidth() / (double) window.getWidth());
+                final int mouseY = (int) (this.mc.mouseHelper.getMouseY() * (double) window.getScaledHeight() / (double) window.getHeight());
                 final int recipeId = this.getHoveredRecipeId(mouseX, mouseY, recipes, gui);
                 CraftingRecipe recipe = recipeId >= 0 ? recipes.getRecipe(recipeId) : recipes.getSelectedRecipe();
 
@@ -100,8 +93,9 @@ public class RenderEventHandler
             GuiContainer gui = (GuiContainer) this.mc.currentScreen;
             RecipeStorage recipes = RecipeStorage.getInstance();
 
-            final int mouseX = InputUtils.getMouseX();
-            final int mouseY = InputUtils.getMouseY();
+            MainWindow window = this.mc.mainWindow;
+            final int mouseX = (int) (this.mc.mouseHelper.getMouseX() * (double) window.getScaledWidth() / (double) window.getWidth());
+            final int mouseY = (int) (this.mc.mouseHelper.getMouseY() * (double) window.getScaledHeight() / (double) window.getHeight());
             final int recipeId = this.getHoveredRecipeId(mouseX, mouseY, recipes, gui);
 
             if (recipeId >= 0)
@@ -124,7 +118,7 @@ public class RenderEventHandler
 
     private void calculateRecipePositions(GuiContainer gui)
     {
-        MainWindow window = mc.mainWindow;
+        MainWindow window = this.mc.mainWindow;
         RecipeStorage recipes = RecipeStorage.getInstance();
         final int gapHorizontal = 2;
         final int gapVertical = 2;
@@ -295,7 +289,7 @@ public class RenderEventHandler
             stack = stack.copy();
             InventoryUtils.setStackSize(stack, 1);
             this.mc.getItemRenderer().zLevel += 100;
-            this.mc.getItemRenderer().renderItemAndEffectIntoGUI(mc.player, stack, x, y);
+            this.mc.getItemRenderer().renderItemAndEffectIntoGUI(this.mc.player, stack, x, y);
             this.mc.getItemRenderer().zLevel -= 100;
         }
 

@@ -1,20 +1,13 @@
 package fi.dy.masa.itemscroller;
 
-import fi.dy.masa.itemscroller.event.WorldLoadListener;
-import fi.dy.masa.malilib.event.WorldLoadHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dimdev.rift.listener.client.ClientTickable;
 import org.dimdev.riftloader.listener.InitializationListener;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
-import fi.dy.masa.itemscroller.config.Configs;
-import fi.dy.masa.itemscroller.event.InputHandler;
 import fi.dy.masa.itemscroller.event.KeybindCallbacks;
-import fi.dy.masa.malilib.config.ConfigManager;
 import fi.dy.masa.malilib.event.InitializationHandler;
-import fi.dy.masa.malilib.event.InputEventHandler;
-import fi.dy.masa.malilib.interfaces.IInitializationHandler;
 import net.minecraft.client.Minecraft;
 
 public class ItemScroller implements ClientTickable, InitializationListener
@@ -34,25 +27,5 @@ public class ItemScroller implements ClientTickable, InitializationListener
     public void clientTick(Minecraft mc)
     {
         KeybindCallbacks.getInstance().onTick(mc);
-    }
-
-    private static class InitHandler implements IInitializationHandler
-    {
-        @Override
-        public void registerModHandlers()
-        {
-            ConfigManager.getInstance().registerConfigHandler(Reference.MOD_ID, new Configs());
-
-            InputHandler handler = new InputHandler();
-            InputEventHandler.getKeybindManager().registerKeybindProvider(handler);
-            InputEventHandler.getInputManager().registerKeyboardInputHandler(handler);
-            InputEventHandler.getInputManager().registerMouseInputHandler(handler);
-
-            WorldLoadListener listener = new WorldLoadListener();
-            WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
-            WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
-
-            KeybindCallbacks.getInstance().setCallbacks();
-        }
     }
 }

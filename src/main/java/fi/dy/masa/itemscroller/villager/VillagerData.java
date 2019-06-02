@@ -1,7 +1,6 @@
 package fi.dy.masa.itemscroller.villager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -73,15 +72,14 @@ public class VillagerData
         tag.putInt("ListPosition", this.tradeListPosition);
         tag.putInt("CurrentPage", this.lastPage);
 
-        //NBTTagList tagList = new NBTTagList();
+        NBTTagList tagList = new NBTTagList();
 
-        tag.putIntArray("Favorites", this.favorites);
-        /*for (Integer val : this.favorites)
+        for (Integer val : this.favorites)
         {
             tagList.add(new NBTTagInt(val.intValue()));
-        }*/
+        }
 
-        //tag.put("Favorites", tagList);
+        tag.put("Favorites", tagList);
 
         return tag;
     }
@@ -95,15 +93,14 @@ public class VillagerData
 
             data.tradeListPosition = tag.getInt("ListPosition");
             data.lastPage = tag.getInt("CurrentPage");
-            //NBTTagList tagList = tag.getList("Favorites", Constants.NBT.TAG_INT);
+            NBTTagList tagList = tag.getList("Favorites", Constants.NBT.TAG_INT);
 
-            //final int count = tagList.size();
+            final int count = tagList.size();
             data.favorites.clear();
 
-            int[] fav = tag.getIntArray("Favorites");
-            for (int i = 0; i < fav.length; ++i)
+            for (int i = 0; i < count; ++i)
             {
-                data.favorites.add(fav[i]);
+                data.favorites.add(tagList.getInt(i));
             }
 
             return data;

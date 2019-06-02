@@ -40,20 +40,11 @@ public class GuiConfigs extends GuiConfigsBase
 
     private int createButton(int x, int y, int width, ConfigGuiTab tab)
     {
-        ButtonListener listener = new ButtonListener(tab, this);
-        boolean enabled = GuiConfigs.tab != tab;
-        String label = tab.getDisplayName();
+        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, tab.getDisplayName());
+        button.setEnabled(GuiConfigs.tab != tab);
+        this.addButton(button, new ButtonListener(tab, this));
 
-        if (width < 0)
-        {
-            width = this.mc.fontRenderer.getStringWidth(label) + 10;
-        }
-
-        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, label);
-        button.setEnabled(enabled);
-        this.addButton(button, listener);
-
-        return width + 2;
+        return button.getWidth() + 2;
     }
 
     @Override
@@ -107,7 +98,7 @@ public class GuiConfigs extends GuiConfigsBase
         }
 
         @Override
-        public void actionPerformedWithButton(ButtonBase control, int mouseButton)
+        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
         {
             GuiConfigs.tab = this.tab;
 

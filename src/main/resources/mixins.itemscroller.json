@@ -6,9 +6,8 @@
     "client": [
         "IMixinGuiContainer",
         "IMixinSlot",
-        "MixinGameRenderer",
         "MixinContainer",
-        "MixinMinecraft",
+        "MixinGameRenderer",
         "MixinGuiMerchant",
         "MixinGuiScreen",
         "MixinInventoryEffectRenderer"
