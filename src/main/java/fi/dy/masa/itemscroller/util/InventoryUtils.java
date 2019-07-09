@@ -20,6 +20,7 @@ import fi.dy.masa.itemscroller.recipes.RecipeStorage;
 import fi.dy.masa.itemscroller.villager.VillagerData;
 import fi.dy.masa.itemscroller.villager.VillagerDataStorage;
 import fi.dy.masa.malilib.util.GuiUtils;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiMerchant;
@@ -77,21 +78,6 @@ public class InventoryUtils
         }
     }
 
-    public static String getStackString(ItemStack stack)
-    {
-        if (isStackEmpty(stack) == false)
-        {
-            ResourceLocation rl = IRegistry.ITEM.getKey(stack.getItem());
-
-            return String.format("[%s - display: %s - NBT: %s] (%s)",
-                    rl != null ? rl.toString() : "null", stack.getDisplayName().getString(),
-                    stack.getTag() != null ? stack.getTag().toString() : "<no NBT>",
-                    stack.toString());
-        }
-
-        return "<empty>";
-    }
-
     public static void debugPrintSlotInfo(GuiContainer gui, Slot slot)
     {
         if (slot == null)
@@ -102,7 +88,7 @@ public class InventoryUtils
 
         boolean hasSlot = gui.inventorySlots.inventorySlots.contains(slot);
         Object inv = slot.inventory;
-        String stackStr = InventoryUtils.getStackString(slot.getStack());
+        String stackStr = StringUtils.getStackString(slot.getStack());
 
         ItemScroller.logger.info(String.format("slot: slotNumber: %d, getSlotIndex(): %d, getHasStack(): %s, " +
                 "slot class: %s, inv class: %s, Container's slot list has slot: %s, stack: %s, numSlots: %d",
