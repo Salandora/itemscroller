@@ -1,6 +1,7 @@
 
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
         maven { url 'http://files.minecraftforge.net/maven' }
         maven { url 'http://repo.spongepowered.org/maven' }
@@ -8,7 +9,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.Chocohead:ForgeGradle:jitpack-SNAPSHOT'
+        //classpath 'com.github.Chocohead:ForgeGradle:jitpack-SNAPSHOT'
+        classpath 'com.github.Salandora:ForgeGradle:jitpack-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
@@ -55,8 +57,9 @@ minecraft {
 }
 
 dependencies {
-    // implementation 'fi.dy.masa.malilib:malilib-rift-' + config.minecraft_version_out + ':' + config.malilib_version + ':deobf'
-    implementation 'com.github.Chocohead:Rift:jitpack-aeee80c1fb-1:dev'
+    implementation 'fi.dy.masa.malilib:malilib-rift-' + config.minecraft_version_out + ':' + config.malilib_version + ':deobf'
+    //implementation 'com.github.Chocohead:Rift:jitpack-aeee80c1fb-1:dev'
+    implementation 'com.github.Salandora:Rift:jitpack-SNAPSHOT:dev'
 }
 
 /*
